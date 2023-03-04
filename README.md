@@ -25,6 +25,10 @@ Installation
 1. Clone the repository:
 
     git clone https://github.com/leonardromano/mrxs2tiff.git
+    
+2. (Optional) Download sample .mrxs files used for testing (while in project folder):
+
+    git submodule update --init
 
 Usage
 =====
