@@ -15,11 +15,11 @@ Optional Arguments:
 
 see example below
 =#
-folder             = "sample_data/folder"         # in sample data/folder there are 2 mrxs files ("1" & "2")
-tmp                = "temporary_folder"           # name does not matter. Only requirement is, that you can write to it and that it does not exist
-dir_out            = "sample_data/tiffs"          # folder to which results are written
-opt_bioformats2raw = "--resolutions=8"             # add options just like with bioformats2raw in the command line 
-opt_raw2ometiff    = "--compression=”JPEG” --rgb" # add options just like with raw2ometiff in the command line
+folder             = "mrxs2tiff_sample_files/folder"  # in sample data/folder there are 2 mrxs files ("1" & "2")
+tmp                = "temporary_folder"               # name does not matter. Only requirement is, that you can write to it and that it does not exist
+dir_out            = "tiffs"                          # folder to which results are written
+opt_bioformats2raw = "--resolutions=8"                # add options just like with bioformats2raw in the command line 
+opt_raw2ometiff    = "--compression=”JPEG” --rgb"     # add options just like with raw2ometiff in the command line
 
 # Optional arguments don't need to be specified, possible call signatures are given below
 mrxs2tiff(folder, tmp=tmp, dir_out=dir_out, opt_bioformats2raw=opt_bioformats2raw, opt_raw2ometiff=opt_raw2ometiff)
@@ -40,12 +40,12 @@ Optional Arguments:
 
 see example below
 =#
-path               = "sample_data/sample_file.mrxs"
+path               = "mrxs2tiff_sample_files/sample_file.mrxs"
 fname              = "sample_file"
-dir_out            = "sample_data/tiffs"          # folder to which results are written
-tmp                = "temporary_folder"           # name does not matter. Only requirement is, that you can write to it and that it does not exist
+dir_out            = "tiffs"                       # folder to which results are written
+tmp                = "temporary_folder"            # name does not matter. Only requirement is, that you can write to it and that it does not exist
 opt_bioformats2raw = "--resolutions=8"             # add options just like with bioformats2raw in the command line 
-opt_raw2ometiff    = "--compression=”JPEG” --rgb" # add options just like with raw2ometiff in the command line
+opt_raw2ometiff    = "--compression=”JPEG” --rgb"  # add options just like with raw2ometiff in the command line
 
 # Optional arguments don't need to be specified, possible call signatures are given below
 mrxs2tiff(path, fname, dir_out, tmp=tmp, opt_bioformats2raw=opt_bioformats2raw, opt_raw2ometiff=opt_raw2ometiff)

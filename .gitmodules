@@ -1,0 +1,3 @@
+[submodule "mrxs2tiff_sample_files"]
+	path = mrxs2tiff_sample_files
+	url = git@github.com:leonardromano/mrxs2tiff_sample_files.git
