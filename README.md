@@ -24,7 +24,7 @@ Installation
 
 1. Clone the repository:
 
-    git clone 
+    git clone git@github.com:leonardromano/mrxs2tiff.git
 
 Usage
 =====
