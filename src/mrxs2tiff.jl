@@ -11,24 +11,20 @@ module Bioformat_To_Tiff_Converter
         - folder::String             -- path to folder with .mrxs files
         
         Optional Arguments:
-        - tmp::String                -- path to temporary directory for pyramid files. Will be deleted in the end. (default: "tmp")
         - dir_out::String            -- path to output directory (default: folder)
         - opt_bioformats2raw::String -- runtime options for bioformats2raw conversion (default: "")
         - opt_raw2ometiff::String    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(folder::String; tmp::String="tmp", dir_out::String=folder, opt_bioformats2raw::String="", opt_raw2ometiff::String="")
+    function mrxs2tiff(folder::String; dir_out::String=folder, opt_bioformats2raw::String="", opt_raw2ometiff::String="")
         # check if output directory exists
         isdir(dir_out) ? nothing : mkpath(dir_out)
-
-        # check if temporary directory already exists
-        isdir(tmp) ? warn_tmp(tmp) : nothing
 
         # go through directory converting all .mrxs files
         for file in readdir(folder)
             path = folder * "/" * file
             if ismrxs(path)
                 fname = replace(file, ".mrxs" => "")
-                mrxs2tiff(path, fname, dir_out, tmp=tmp, 
+                mrxs2tiff(path, fname, dir_out, 
                           opt_bioformats2raw=opt_bioformats2raw, 
                           opt_raw2ometiff=opt_raw2ometiff)
             end
@@ -44,17 +40,16 @@ module Bioformat_To_Tiff_Converter
         - dir_out::String            -- path to output directory 
     
         Optional Arguments:
-        - tmp::String                -- path to temporary directory for pyramid files. Will be deleted in the end. (default: "tmp")
         - opt_bioformats2raw::String -- runtime options for bioformats2raw conversion (default: "")
         - opt_raw2ometiff::String    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(path::String, fname::String, dir_out::String; tmp::String="tmp", opt_bioformats2raw::String="", opt_raw2ometiff::String="")
+    function mrxs2tiff(path::String, fname::String, dir_out::String; opt_bioformats2raw::String="", opt_raw2ometiff::String="")
         # convert mrxs to pyramid file
-        run(`bioformats2raw $(opt_bioformats2raw) $(path) $(tmp)/zarr-pyramid`)
+        run_windows(`bioformats2raw $(opt_bioformats2raw) $(path) $(dir_out)/zarr-pyramid`)
         # convert pyramid to tiff
-        run(`raw2ometiff $(opt_raw2ometiff) $(tmp)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
+        run_windows(`raw2ometiff $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
         # remove temporary files
-        run(`rm -r $(tmp)`)
+        run_windows(`rm -r $(dir_out)/zarr-pyramid`)
     end
 
     "Check whether or not a path corresponds to an .mrxs file"
@@ -62,13 +57,12 @@ module Bioformat_To_Tiff_Converter
         isfile(path) ? endswith(path, ".mrxs") : false
     end
 
-    "Output a warning message regarding the temporary directory."
-    function warn_tmp(tmp::String)
-        println("The temporary directory '$(tmp)' seems to already exist!")
-        println("$(tmp) will be deleted during the execution of the program.")
-        println("To avoid accidental loss of data, please make sure that 'tmp' does not match any existing directories!")
-        println("Stopping all processes...")
-
-        exit(86)
+    "Update to run function to also work on windows."
+    function run_windows(command::AbstractCmd; shell::Union{String, Cmd} = `cmd`)
+        try 
+            run(command)
+        catch e
+             run(`$shell /c $command`)
+        end
     end
 end
