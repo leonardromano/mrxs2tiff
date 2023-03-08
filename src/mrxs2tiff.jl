@@ -58,7 +58,7 @@ module Bioformat_To_Tiff_Converter
     end
 
     "Update to run function to also work on windows."
-    function run_windows(command::AbstractCmd; shell::Union{String, Cmd} = `cmd`)
+    function run_windows(command::Cmd; shell::Union{String, Cmd} = `cmd`)
         try 
             run(command)
         catch e
