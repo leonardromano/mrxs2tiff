@@ -12,10 +12,13 @@ module Bioformat_To_Tiff_Converter
         
         Optional Arguments:
         - dir_out::String            -- path to output directory (default: folder)
+        - bioformats2raw::String     -- command to call bioformats2raw (default: "bioformats2raw")
         - opt_bioformats2raw::String -- runtime options for bioformats2raw conversion (default: "")
+        - raw2ometiff::String        -- command to call raw2ometiff (default: "raw2ometiff")
         - opt_raw2ometiff::String    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(folder::String; dir_out::String=folder, opt_bioformats2raw::String="", opt_raw2ometiff::String="")
+    function mrxs2tiff(folder::String; dir_out::String=folder, bioformats2raw::String="bioformats2raw", opt_bioformats2raw::String="", 
+                       raw2ometiff::String="raw2ometiff", opt_raw2ometiff::String="")
         # check if output directory exists
         isdir(dir_out) ? nothing : mkpath(dir_out)
 
@@ -25,8 +28,8 @@ module Bioformat_To_Tiff_Converter
             if ismrxs(path)
                 fname = replace(file, ".mrxs" => "")
                 mrxs2tiff(path, fname, dir_out, 
-                          opt_bioformats2raw=opt_bioformats2raw, 
-                          opt_raw2ometiff=opt_raw2ometiff)
+                          bioformats2raw=bioformats2raw, opt_bioformats2raw=opt_bioformats2raw, 
+                          raw2ometiff=raw2ometiff, opt_raw2ometiff=opt_raw2ometiff)
             end
         end
     end
@@ -40,14 +43,17 @@ module Bioformat_To_Tiff_Converter
         - dir_out::String            -- path to output directory 
     
         Optional Arguments:
+        - bioformats2raw::String     -- command to call bioformats2raw (default: "bioformats2raw")
         - opt_bioformats2raw::String -- runtime options for bioformats2raw conversion (default: "")
+        - raw2ometiff::String        -- command to call raw2ometiff (default: "raw2ometiff")
         - opt_raw2ometiff::String    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(path::String, fname::String, dir_out::String; opt_bioformats2raw::String="", opt_raw2ometiff::String="")
+    function mrxs2tiff(path::String, fname::String, dir_out::String; bioformats2raw::String="bioformats2raw", opt_bioformats2raw::String="", 
+                       raw2ometiff::String="raw2ometiff", opt_raw2ometiff::String="")
         # convert mrxs to pyramid file
-        run_windows(`bioformats2raw $(opt_bioformats2raw) $(path) $(dir_out)/zarr-pyramid`)
+        run_windows(`$(bioformats2raw) $(opt_bioformats2raw) $(path) $(dir_out)/zarr-pyramid`)
         # convert pyramid to tiff
-        run_windows(`raw2ometiff $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
+        run_windows(`$(raw2ometiff) $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
         # remove temporary files
         run_windows(`rm -r $(dir_out)/zarr-pyramid`)
     end
