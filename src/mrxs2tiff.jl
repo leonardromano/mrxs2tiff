@@ -55,7 +55,7 @@ module Bioformat_To_Tiff_Converter
         # convert pyramid to tiff
         run_windows(`$(raw2ometiff) $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
         # remove temporary files
-        delete_windows("$(dir_out)/zarr-pyramid")
+        rm("$(dir_out)/zarr-pyramid", recursive=true, force=true)
     end
 
     "Check whether or not a path corresponds to an .mrxs file"
@@ -69,15 +69,6 @@ module Bioformat_To_Tiff_Converter
             run(command)
         catch e
              run(`$shell /c $command`)
-        end
-    end
-
-    "Delete path in bash or batch shell"
-    function delete_windows(path::String)
-        try
-            run(`rm -r $(path)`)
-        catch e
-            run(`cmd /c rmdir /s /q $(path)`)
         end
     end
 end
