@@ -20,7 +20,7 @@ folder             = "mrxs2tiff_sample_files/folder"     # in sample data/folder
 dir_out            = "tiffs"                             # folder to which results are written
 bioformats2raw     = ["conda", "run", "bioformats2raw"]  # Change this to the way you call bioformats2raw on your system from the command line
 opt_bioformats2raw = ["--resolutions=8"]                 # add options just like with bioformats2raw in the command line
-raw2ometiff        = ["conda", "run", "bioformats2raw"]  # Change this to the way you call raw2ometiff on your system from the command line
+raw2ometiff        = ["conda", "run", "raw2ometiff"]  # Change this to the way you call raw2ometiff on your system from the command line
 opt_raw2ometiff    = ["--compression=\"JPEG\"", "--rgb"] # add options just like with raw2ometiff in the command line
 
 # Optional arguments don't need to be specified, possible call signatures are given below
