@@ -17,8 +17,8 @@ module Bioformat_To_Tiff_Converter
         - raw2ometiff::Vector{String}        -- command to call raw2ometiff (default: "raw2ometiff")
         - opt_raw2ometiff::Vector{String}    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(folder::String; dir_out::String=folder, bioformats2raw::Vector{String}=["bioformats2raw"], opt_bioformats2raw::Vector{String}=[""], 
-                       raw2ometiff::Vector{String}=["raw2ometiff"], opt_raw2ometiff::Vector{String}=[""])
+    function mrxs2tiff(folder::String; dir_out::String=folder, bioformats2raw::Vector{String}=["bioformats2raw"], opt_bioformats2raw::Vector{<:Any}=[], 
+                       raw2ometiff::Vector{String}=["raw2ometiff"], opt_raw2ometiff::Vector{<:Any}=[])
         # check if output directory exists
         isdir(dir_out) ? nothing : mkpath(dir_out)
 
@@ -48,13 +48,18 @@ module Bioformat_To_Tiff_Converter
         - raw2ometiff::Vector{String}        -- command to call raw2ometiff (default: "raw2ometiff")
         - opt_raw2ometiff::Vector{String}    -- runtime options for raw2ometiff conversion (default: "")
     """
-    function mrxs2tiff(path::String, fname::String, dir_out::String; bioformats2raw::Vector{String}=["bioformats2raw"], opt_bioformats2raw::Vector{String}=[""], 
-                       raw2ometiff::Vector{String}=["raw2ometiff"], opt_raw2ometiff::Vector{String}=[""])
+    function mrxs2tiff(path::String, fname::String, dir_out::String; bioformats2raw::Vector{String}=["bioformats2raw"], opt_bioformats2raw::Vector{<:Any}=[], 
+                       raw2ometiff::Vector{String}=["raw2ometiff"], opt_raw2ometiff::Vector{<:Any}=[])
         # convert mrxs to pyramid file
-        run_windows(`$(bioformats2raw) $(opt_bioformats2raw) $(path) $(dir_out)/zarr-pyramid`)
+        command = `$(bioformats2raw) $(opt_bioformats2raw) $(path) $(dir_out)/zarr-pyramid`
+        println("Executing: $command")
+        run_windows(command)
         # convert pyramid to tiff
-        run_windows(`$(raw2ometiff) $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`)
+        command = `$(raw2ometiff) $(opt_raw2ometiff) $(dir_out)/zarr-pyramid $(dir_out)/$(fname).ome.tiff`
+        println("Executing: $command")
+        run_windows(command)
         # remove temporary files
+        println("Removing temporary files...")
         rm("$(dir_out)/zarr-pyramid", recursive=true, force=true)
     end
 
