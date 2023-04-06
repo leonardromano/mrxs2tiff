@@ -36,6 +36,10 @@ Usage
 Modify the script file main.jl, specifying all the needed options (described there in detail) and run it using:
 
     julia main.jl
+    
+## Supporting and Citing
+To credit the mrxs2tiff software, please star the repository on GitHub. If you use the Mera software as part of your research, teaching, or other activities, I would be grateful if you could cite my work. To give proper academic credit, follow the link for BibTeX export:
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7804944.svg)](https://doi.org/10.5281/zenodo.7804944)
 
 License
 =======
